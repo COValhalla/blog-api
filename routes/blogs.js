@@ -9,11 +9,11 @@ router.post('/create', blog_controller.blog_create_post);
 
 // GET/POST request to delete Blog.
 router.get('/:id/delete', blog_controller.blog_delete_get);
-router.post('/:id/delete', blog_controller.blog_delete_post);
+router.delete('/:id/delete', blog_controller.blog_delete_post);
 
 // GET/POST for updating Blog.
 router.get('/:id/update', blog_controller.blog_update_get);
-router.post('/:id/update', blog_controller.blog_update_post);
+router.put('/:id/update', blog_controller.blog_update_post);
 
 // GET request for one Blog.
 router.get('/:id', blog_controller.blog_detail);

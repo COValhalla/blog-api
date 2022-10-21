@@ -9,11 +9,11 @@ router.post('/create', comment_controller.comment_create_post);
 
 // GET/POST request to delete Comment.
 router.get('/:id/delete', comment_controller.comment_delete_get);
-router.post('/:id/delete', comment_controller.comment_delete_post);
+router.delete('/:id/delete', comment_controller.comment_delete_post);
 
 // GET/POST for updating Comment.
 router.get('/:id/update', comment_controller.comment_update_get);
-router.post('/:id/update', comment_controller.comment_update_post);
+router.put('/:id/update', comment_controller.comment_update_post);
 
 // GET request for one Comment.
 router.get('/:id', comment_controller.comment_detail);
