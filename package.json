@@ -7,7 +7,6 @@
     "devstart": "nodemon ./bin/www",
     "tailwind:css": "postcss public/stylesheets/tailwind.css -o public/stylesheets/style.css"
   },
-  "proxy": "http://localhost:3000",
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
