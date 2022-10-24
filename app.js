@@ -23,6 +23,14 @@ app.use(
   }),
 );
 
+// Mongoose connection
+const mongoose = require('mongoose');
+const MONGODB = process.env.MONGODB;
+mongoose.connect(MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+// Routes
 app.use('/api', indexRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/blogs', blogsRouter);
