@@ -2,6 +2,8 @@ const Users = require('../models/Users');
 const passport = require('passport');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv').config();
 
 exports.user_list = (req, res) => {
   res.send('NOT IMPLEMENTED: User list');
@@ -32,22 +34,33 @@ exports.create = async (req, res, next) => {
         return next(err);
       }
       // Successful - rediredct to new user record.
-      passport.authenticate('local', function (err, user, info) {
-        if (err) {
-          return next(err);
-        }
-        if (!user) {
-          return res
-            .status(400)
-            .json({ errors: 'Username or password is incorrect' });
-        }
-        req.logIn(user, function (err) {
+      passport.authenticate(
+        'local',
+        { session: false },
+        function (err, user, info) {
           if (err) {
             return next(err);
           }
-          return res.status(201).json({ user: user });
-        });
-      })(req, res, next);
+          if (!user) {
+            return res
+              .status(400)
+              .json({ errors: 'Username or password is incorrect' });
+          }
+          req.logIn(user, { session: false }, function (err) {
+            if (err) {
+              return next(err);
+            }
+
+            // Create JWT
+            const token = jwt.sign(
+              { id: user._id, username: user.username },
+              process.env.JWT_SECRET,
+              { expiresIn: '1h' },
+            );
+            return res.status(201).json({ user, token });
+          });
+        },
+      )(req, res, next);
     });
   });
 };

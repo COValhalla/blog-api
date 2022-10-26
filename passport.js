@@ -1,7 +1,11 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const passportJWT = require('passport-jwt');
+const JWTStrategy = passportJWT.Strategy;
+const ExtractJWT = passportJWT.ExtractJwt;
 const bcrypt = require('bcryptjs');
 const Users = require('./models/Users');
+const dotenv = require('dotenv').config();
 
 // Passport
 passport.use(
@@ -34,3 +38,22 @@ passport.deserializeUser(function (id, done) {
     done(err, user);
   });
 });
+
+passport.use(
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.JWT_SECRET,
+    },
+    function (jwtPayload, cb) {
+      //find the user in db if needed
+      return Users.findById(jwtPayload.id)
+        .then((user) => {
+          return cb(null, user);
+        })
+        .catch((err) => {
+          return cb(err);
+        });
+    },
+  ),
+);

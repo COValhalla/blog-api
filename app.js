@@ -44,7 +44,11 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // Routes
 app.use('/api', indexRouter);
 app.use('/api/users', usersRouter);
-app.use('/api/blogs', blogsRouter);
+app.use(
+  '/api/blogs',
+  passport.authenticate('jwt', { session: false }),
+  blogsRouter,
+);
 app.use('/api/blogs/:id/comments', commentsRouter);
 
 // catch 404 and forward to error handler
