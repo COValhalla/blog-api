@@ -7,4 +7,6 @@ router.get('/', user_controlller.user_list);
 
 router.post('/create', user_controlller.create);
 
+router.post('/login', user_controlller.login);
+
 module.exports = router;

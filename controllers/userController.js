@@ -64,3 +64,34 @@ exports.create = async (req, res, next) => {
     });
   });
 };
+
+// Login
+exports.login = async (req, res, next) => {
+  passport.authenticate(
+    'local',
+    { session: false },
+    function (err, user, info) {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res
+          .status(400)
+          .json({ errors: 'Username or password is incorrect' });
+      }
+      req.logIn(user, { session: false }, function (err) {
+        if (err) {
+          return next(err);
+        }
+
+        // Create JWT
+        const token = jwt.sign(
+          { id: user._id, username: user.username },
+          process.env.JWT_SECRET,
+          { expiresIn: '1h' },
+        );
+        return res.status(200).json({ user, token });
+      });
+    },
+  )(req, res, next);
+};
