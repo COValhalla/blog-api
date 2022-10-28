@@ -86,6 +86,46 @@ exports.blog_update_get = function (req, res) {
   });
 };
 
+// Update blog on put
+exports.blog_update_put = function (req, res) {
+  // Login required
+  if (!req.user) {
+    return res.status(401).json({ errors: 'You must be logged in' });
+  }
+
+  // Validate request
+  if (!req.body.title) {
+    return res.status(400).json({ errors: 'Title is required' });
+  }
+  if (!req.body.content) {
+    return res.status(400).json({ errors: 'Content is required' });
+  }
+
+  // Find the blog
+  Blogs.findById(req.params.id, function (err, blog) {
+    if (err) {
+      return next(err);
+    }
+    if (blog === null) {
+      // No results.
+      const err = new Error('Blog not found');
+      err.status = 404;
+      return next(err);
+    }
+    // Success.
+    blog.title = req.body.title;
+    blog.content = req.body.content;
+    blog.status = req.body.status;
+    blog.save(function (err) {
+      if (err) {
+        return next(err);
+      }
+      // Successful - redirect to new blog record.
+      res.status(200).json({ blog });
+    });
+  });
+};
+
 // Handle Blog update on POST.
 exports.blog_update_post = function (req, res) {
   res.json({ message: 'NOT IMPLEMENTED: Blog update POST' });
