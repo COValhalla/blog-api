@@ -77,7 +77,7 @@ exports.login = async (req, res, next) => {
       if (!user) {
         return res
           .status(400)
-          .json({ errors: 'Username or password is incorrect' });
+          .json({ errors: 'Username or password is incorrect.' });
       }
       req.logIn(user, { session: false }, function (err) {
         if (err) {

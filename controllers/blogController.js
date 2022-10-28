@@ -16,8 +16,33 @@ exports.blog_create_get = function (req, res) {
 };
 
 // Handle Blog create on POST.
-exports.blog_create_post = function (req, res) {
-  res.json({ message: 'NOT IMPLEMENTED: Blog create POST' });
+exports.blog_create_post = function (req, res, next) {
+  // Login required
+  if (!req.user) {
+    return res.status(401).json({ errors: 'You must be logged in' });
+  }
+
+  // Validate request
+  if (!req.body.title) {
+    return res.status(400).json({ errors: 'Title is required' });
+  }
+  if (!req.body.content) {
+    return res.status(400).json({ errors: 'Content is required' });
+  }
+
+  // Create a Blog
+  const blog = new Blogs({
+    title: req.body.title,
+    content: req.body.content,
+    status: req.body.status,
+    user: req.user._id,
+  }).save(function (err) {
+    if (err) {
+      return next(err);
+    }
+    // Successful - redirect to new blog record.
+    res.status(200).json({ blog });
+  });
 };
 
 // Display Blog delete form on GET.
