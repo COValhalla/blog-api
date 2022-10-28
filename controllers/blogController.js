@@ -2,7 +2,20 @@ const Blogs = require('../models/Blogs');
 
 // Display list of all Blogs.
 exports.blog_list = function (req, res) {
-  res.json({ message: 'NOT IMPLEMENTED: Blog list' });
+  // Login required
+  if (!req.user) {
+    return res.status(401).json({ errors: 'You must be logged in' });
+  }
+
+  Blogs.find({ user: req.user._id })
+    .sort({ createdAt: -1 })
+    .exec(function (err, list_blogs) {
+      if (err) {
+        return next(err);
+      }
+      // Successful, so render.
+      res.status(200).json({ blogs: list_blogs });
+    });
 };
 
 // Display detail page for a specific Blog.
@@ -57,7 +70,20 @@ exports.blog_delete_post = function (req, res) {
 
 // Display Blog update form on GET.
 exports.blog_update_get = function (req, res) {
-  res.json({ message: 'NOT IMPLEMENTED: Blog update GET' });
+  // Find the blog
+  Blogs.findById(req.params.id, function (err, blog) {
+    if (err) {
+      return next(err);
+    }
+    if (blog === null) {
+      // No results.
+      const err = new Error('Blog not found');
+      err.status = 404;
+      return next(err);
+    }
+    // Success.
+    res.status(200).json({ blog });
+  });
 };
 
 // Handle Blog update on POST.
