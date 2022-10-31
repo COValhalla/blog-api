@@ -4,6 +4,13 @@ var passport = require('passport');
 
 const blog_controller = require('../controllers/blogController');
 
+// GET request for authenticated user's blogs
+router.get(
+  '/user',
+  passport.authenticate('jwt', { session: false }),
+  blog_controller.blog_list_user,
+);
+
 // GET/POST request for creating a Blog.
 router.get(
   '/create',
@@ -44,9 +51,6 @@ router.put(
 router.get('/:id', blog_controller.blog_detail);
 
 // GET request for list of all Blog items.
-router.get('/', blog_controller.blog_list);
-
-// GET request for author's Blog items.
 router.get('/', blog_controller.blog_list);
 
 module.exports = router;
