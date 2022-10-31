@@ -44,11 +44,7 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // Routes
 app.use('/api', indexRouter);
 app.use('/api/users', usersRouter);
-app.use(
-  '/api/blogs',
-  passport.authenticate('jwt', { session: false }),
-  blogsRouter,
-);
+app.use('/api/blogs', blogsRouter);
 app.use('/api/blogs/:id/comments', commentsRouter);
 
 // catch 404 and forward to error handler
@@ -63,8 +59,7 @@ app.use(function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500).json({ error: 'Something went wrong.' });
 });
 
 module.exports = app;
