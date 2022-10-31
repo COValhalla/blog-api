@@ -2,6 +2,19 @@ const Blogs = require('../models/Blogs');
 
 // Display list of all Blogs.
 exports.blog_list = function (req, res) {
+  Blogs.find()
+    .sort({ createdAt: -1 })
+    .exec(function (err, list_blogs) {
+      if (err) {
+        return next(err);
+      }
+      // Successful, so render.
+      res.status(200).json({ blog_list: list_blogs });
+    });
+};
+
+// Need an authoization check here for individual user blogs, no check for all blogs
+exports.blog_list_user = function (req, res) {
   // Login required
   if (!req.user) {
     return res.status(401).json({ errors: 'You must be logged in' });
@@ -19,8 +32,23 @@ exports.blog_list = function (req, res) {
 };
 
 // Display detail page for a specific Blog.
-exports.blog_detail = function (req, res) {
-  res.json({ message: 'NOT IMPLEMENTED: Blog detail: ' + req.params.id });
+exports.blog_detail = function (req, res, next) {
+  // Find the blog
+  Blogs.findById(req.params.id)
+    .populate('user')
+    .exec(function (err, blog) {
+      if (err) {
+        return next(err);
+      }
+      if (blog === null) {
+        // No results.
+        const err = new Error('Blog not found');
+        err.status = 404;
+        return next(err);
+      }
+      // Success.
+      res.status(200).json(blog);
+    });
 };
 
 // Display Blog create form on GET.
