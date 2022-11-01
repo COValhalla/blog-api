@@ -3,7 +3,7 @@ const passport = require('passport');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 
 exports.user_list = (req, res) => {
   res.send('NOT IMPLEMENTED: User list');

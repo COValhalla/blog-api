@@ -7,8 +7,7 @@ var cors = require('cors');
 const session = require('express-session');
 var passport = require('passport');
 require('./passport');
-
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
