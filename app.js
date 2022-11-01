@@ -8,6 +8,17 @@ const session = require('express-session');
 var passport = require('passport');
 require('./passport');
 require('dotenv').config();
+var config = require('./Constants');
+
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (config.url.API_URL.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -21,11 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(
-  cors({
-    origin: 'http://localhost:5173',
-  }),
-);
+app.use(cors(corsOptions));
 
 app.use(session({ secret: 'cats', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
