@@ -7,10 +7,10 @@ const bcrypt = require('bcryptjs');
 const Users = require('./models/Users');
 require('dotenv').config();
 
-const options = {
-  jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-  secretOrKey: process.env.JWT_SECRET,
-};
+const options = {};
+
+options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+options.secretOrKey = process.env.JWT_SECRET;
 
 // Passport
 passport.use(
