@@ -1,7 +1,7 @@
 const prod = {
   url: {
     API_URL: [
-      'https://blooming-reef-21992.herokuapp.com/',
+      'https://blog-view-covalhalla.netlify.app/',
       'http://localhost:5173',
     ],
   },
