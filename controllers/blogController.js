@@ -2,7 +2,7 @@ const Blogs = require('../models/Blogs');
 
 // Display list of all Blogs.
 exports.blog_list = function (req, res) {
-  Blogs.find()
+  Blogs.find({ status: 'published' })
     .sort({ createdAt: -1 })
     .exec(function (err, list_blogs) {
       if (err) {

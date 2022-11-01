@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const BlogSchema = new Schema({
+  Date: { type: Date, default: Date.now.toLocaleString('en-us') },
   title: { type: String, required: true, max: 100 },
   content: { type: String, required: true },
   status: { type: String, enum: ['unpublished', 'published'], required: true },
