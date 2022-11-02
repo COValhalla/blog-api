@@ -93,7 +93,31 @@ exports.blog_delete_get = function (req, res) {
 
 // Handle Blog delete on POST.
 exports.blog_delete_post = function (req, res) {
-  res.json({ message: 'NOT IMPLEMENTED: Blog delete POST' });
+  if (!req.user) {
+    return res.status(401).json({ errors: 'You must be logged in' });
+  }
+
+  // Find the blog
+  Blogs.findById(req.params.id, function (err, blog) {
+    if (err) {
+      return next(err);
+    }
+    if (blog === null) {
+      // No results.
+      const err = new Error('Blog not found');
+      err.status = 404;
+      return next(err);
+    }
+    // Success.
+    // Delete the blog
+    Blogs.findByIdAndRemove(req.params.id, function deleteBlog(err) {
+      if (err) {
+        return next(err);
+      }
+      // Success - go to blog list
+      res.status(200).json({ message: 'Blog deleted' });
+    });
+  });
 };
 
 // Display Blog update form on GET.
