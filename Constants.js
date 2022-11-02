@@ -3,6 +3,7 @@ const prod = {
     API_URL: [
       'https://blog-view-covalhalla.netlify.app',
       'http://localhost:5173',
+      'https://main--blog-view-covalhalla.netlify.app',
     ],
   },
 };
