@@ -115,7 +115,7 @@ exports.blog_update_get = function (req, res) {
 };
 
 // Update blog on put
-exports.blog_update_put = function (req, res) {
+exports.blog_update_put = function (req, res, next) {
   // Login required
   if (!req.user) {
     return res.status(401).json({ errors: 'You must be logged in' });
